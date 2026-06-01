@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>GenHub | Address & Card Generator's</title>
+<title>GenHUB</title>
 
 <!-- PWA Manifest -->
 <link rel="manifest" href="/manifest.json">
@@ -11,7 +11,7 @@
 <!-- iOS / Safari PWA support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="GenHUB">
+<meta name="apple-mobile-web-app-title" content="AddrGen">
 <link rel="apple-touch-icon" href="/icons/icon-180x180.png">
 
 <!-- Theme color for browser UI -->
@@ -463,6 +463,22 @@
 </style>
 </head>
 <body>
+<!-- Auth Guard -->
+<script>
+(function() {
+  'use strict';
+  const SESSION_KEY = "gh_session";
+  function getCookie(name) {
+    return document.cookie.split("; ").reduce(function(acc, c) {
+      var parts = c.split("="); return parts[0] === name ? parts[1] : acc;
+    }, "");
+  }
+  if (getCookie(SESSION_KEY) !== "ok") {
+    window.location.replace("/login.html");
+  }
+})();
+</script>
+
 
 <!-- DevTools Warning Overlay -->
 <div id="devtools-warning">

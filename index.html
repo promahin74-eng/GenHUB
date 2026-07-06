@@ -559,7 +559,16 @@
   var devtoolsOpen = false;
   var threshold = 160;
 
+  // Skip DevTools detection on touch/mobile devices — outerWidth/outerHeight
+  // vs innerWidth/innerHeight naturally differ on phones & PWAs (address bar,
+  // status bar, notch, standalone mode), causing false positives that blur
+  // the page and set pointer-events:none, blocking every button (Generate included).
+  var isTouchDevice = ('ontouchstart' in window) ||
+    (navigator.maxTouchPoints > 0) ||
+    /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
   function checkDevTools() {
+    if (isTouchDevice) return;
     var widthDiff = window.outerWidth - window.innerWidth;
     var heightDiff = window.outerHeight - window.innerHeight;
     var isOpen = widthDiff > threshold || heightDiff > threshold;
@@ -579,6 +588,7 @@
 
   // 7. Debugger trap — slows down devtools significantly
   var devtoolsTrap = function() {
+    if (isTouchDevice) return;
     var before = new Date();
     // eslint-disable-next-line no-debugger
     (function() {}['constructor']('debugger')());

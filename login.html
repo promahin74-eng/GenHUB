@@ -5,1021 +5,514 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GenHub – Sign In</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#f5f7fa">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#0b0b12">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-  --bg: #f0f4f9;
-  --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --border: rgba(0,0,0,0.08);
-  --border-focus: #3b82f6;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --accent: #3b82f6;
-  --accent-dark: #2563eb;
-  --accent-light: rgba(59,130,246,0.08);
-  --accent-glow: rgba(59,130,246,0.22);
-  --error: #ef4444;
-  --error-light: rgba(239,68,68,0.08);
-  --warning: #f59e0b;
-  --warning-light: rgba(245,158,11,0.08);
-  --success: #10b981;
-  --success-light: rgba(16,185,129,0.08);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-  --shadow-lg: 0 20px 60px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.06);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-xs: 7px;
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
+  :root {
+    --bg1: #0f1020;
+    --bg2: #1a1530;
+    --card: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.14);
+    --label: #f5f5f7;
+    --label2: #a1a1ab;
+    --blue: #0a84ff;
+    --blue2: #64d2ff;
+    --sep: rgba(255,255,255,0.10);
+    --red: #ff453a;
+  }
 
-html, body {
-  min-height: 100vh;
-  font-family: 'Inter', -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: var(--bg);
-  color: var(--text-primary);
-}
+  html, body {
+    height: 100%;
+    background: var(--bg1);
+    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    position: relative;
+  }
 
-/* ── Minimal mesh background ── */
-.mesh {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.mesh::before {
-  content: '';
-  position: absolute;
-  width: 700px; height: 700px;
-  top: -200px; right: -150px;
-  background: radial-gradient(circle, rgba(147,197,253,0.28) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: meshDrift1 18s ease-in-out infinite;
-}
-.mesh::after {
-  content: '';
-  position: absolute;
-  width: 600px; height: 600px;
-  bottom: -150px; left: -100px;
-  background: radial-gradient(circle, rgba(196,181,253,0.18) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: meshDrift2 22s ease-in-out infinite;
-}
-.mesh-mid {
-  position: absolute;
-  width: 400px; height: 400px;
-  top: 40%; left: 30%;
-  background: radial-gradient(circle, rgba(167,243,208,0.14) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: meshDrift3 16s ease-in-out 4s infinite;
-}
-@keyframes meshDrift1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-40px,30px) scale(1.05)} }
-@keyframes meshDrift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-40px) scale(1.08)} }
-@keyframes meshDrift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,20px) scale(0.95)} }
+  /* Layered ambient mesh background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(10,132,255,0.28), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(175,82,222,0.22), transparent 45%),
+      radial-gradient(circle at 75% 85%, rgba(48,209,88,0.16), transparent 50%),
+      radial-gradient(circle at 20% 90%, rgba(255,159,10,0.14), transparent 45%),
+      linear-gradient(160deg, var(--bg1), var(--bg2));
+    z-index: 0;
+    animation: mesh-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes mesh-drift {
+    0%   { filter: hue-rotate(0deg) brightness(1); }
+    100% { filter: hue-rotate(12deg) brightness(1.08); }
+  }
+  /* subtle grain */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 3px 3px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
 
-/* ── Page wrap ── */
-.page-wrap {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  animation: wrapIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-@keyframes wrapIn {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+  /* ══════════ ORBIT SYSTEM ══════════ */
+  .orbit-wrap {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin-bottom: 6px;
+    z-index: 1;
+  }
 
-/* ── Brand header ── */
-.brand-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.brand-wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.brand-icon {
-  width: 44px; height: 44px;
-  background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 14px var(--accent-glow);
-  flex-shrink: 0;
-}
-.brand-icon svg {
-  width: 24px; height: 24px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.brand-name {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.8px;
-  color: var(--text-primary);
-  line-height: 1;
-}
-.brand-tagline {
-  font-size: 14px;
-  color: var(--text-secondary);
-  letter-spacing: 0.1px;
-  margin-top: 2px;
-}
+  /* faint guide rings */
+  .orbit-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .ring-1 { width: 200px; height: 200px; }
+  .ring-2 { width: 260px; height: 260px; border-style: dashed; opacity: 0.5; }
 
-/* ── Status badge (welcome back / last login) ── */
-.status-badges {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
-  min-height: 0;
-}
-.welcome-badge {
-  display: none;
-  align-items: center;
-  gap: 7px;
-  background: var(--success-light);
-  border: 1px solid rgba(16,185,129,0.2);
-  border-radius: 30px;
-  padding: 6px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #065f46;
-  animation: badgeSlide 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-.welcome-badge.show { display: flex; }
-@keyframes badgeSlide {
-  from { opacity:0; transform:scale(0.85) translateY(6px); }
-  to   { opacity:1; transform:scale(1) translateY(0); }
-}
-.badge-dot {
-  width: 7px; height: 7px;
-  background: var(--success);
-  border-radius: 50%;
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100%{ transform:scale(1); opacity:1; }
-  50%{ transform:scale(0.7); opacity:0.6; }
-}
-.last-login {
-  display: none;
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
-.last-login.show { display: block; }
+  /* rotating carriers — the icons sit on these and spin slowly, kept upright */
+  .orbit {
+    position: absolute;
+    inset: 0;
+    animation: spin 26s linear infinite;
+  }
+  .orbit.reverse { animation-direction: reverse; animation-duration: 34s; }
 
-/* ── Card ── */
-.card {
-  width: 100%;
-  background: var(--surface);
-  border-radius: 22px;
-  padding: 36px 32px 32px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), #8b5cf6, #ec4899);
-  border-radius: 22px 22px 0 0;
-  opacity: 0.8;
-}
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes spin-rev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
 
-.card-title {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  text-align: center;
-}
-.card-sub {
-  font-size: 14px;
-  color: var(--text-secondary);
-  text-align: center;
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
+  .orbit-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.25);
+    animation: spin-rev 26s linear infinite, pop-in 0.6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .orbit.reverse .orbit-icon { animation: spin 34s linear infinite, pop-in 0.6s cubic-bezier(.34,1.56,.64,1) both; }
 
-/* ── Alerts ── */
-.alert {
-  border-radius: var(--radius-sm);
-  padding: 11px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  margin-bottom: 16px;
-  display: none;
-  align-items: flex-start;
-  gap: 8px;
-}
-.alert.show { display: flex; }
-.alert-icon { flex-shrink: 0; margin-top: 1px; }
-.alert-icon svg { width: 15px; height: 15px; }
-.alert-error {
-  background: var(--error-light);
-  border: 1px solid rgba(239,68,68,0.18);
-  color: #b91c1c;
-}
-.alert-warning {
-  background: var(--warning-light);
-  border: 1px solid rgba(245,158,11,0.2);
-  color: #92400e;
-}
-.alert-lockout {
-  background: var(--error-light);
-  border: 1px solid rgba(239,68,68,0.2);
-  color: #b91c1c;
-  text-align: center;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 14px;
-}
-.alert-lockout.show { display: flex; }
-.lockout-timer { font-size: 20px; font-weight: 700; color: var(--error); letter-spacing: -0.5px; }
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(0.3); }
+    to   { opacity: 1; transform: scale(1); }
+  }
 
-/* ── Input field ── */
-.field-group {
-  margin-bottom: 6px;
-}
-.field-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-.field-label-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.field-hint {
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
+  .orbit-icon svg { width: 20px; height: 20px; }
 
-.input-wrap {
-  position: relative;
-}
-.pw-input {
-  width: 100%;
-  height: 50px;
-  background: var(--surface-2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 3px;
-  padding: 0 52px 0 16px;
-  color: var(--text-primary);
-  outline: none;
-  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
-  -webkit-appearance: none;
-}
-.pw-input::placeholder { letter-spacing: 1px; color: var(--text-muted); font-size: 18px; }
-.pw-input.text-mode { letter-spacing: 0.3px; }
-.pw-input:focus {
-  border-color: var(--border-focus);
-  background: #fff;
-  box-shadow: 0 0 0 3px var(--accent-light);
-}
-.pw-input.error-state {
-  border-color: var(--error) !important;
-  background: var(--error-light) !important;
-  box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important;
-  animation: shake 0.4s ease;
-}
-@keyframes shake {
-  0%,100%{ transform:translateX(0) }
-  15%{ transform:translateX(-8px) }
-  30%{ transform:translateX(8px) }
-  45%{ transform:translateX(-6px) }
-  60%{ transform:translateX(6px) }
-  75%{ transform:translateX(-3px) }
-  90%{ transform:translateX(3px) }
-}
+  /* Positions around ring-1 (radius 100px) */
+  .o1 { top: 0;    left: 50%; margin-left: -20px; width: 40px; height: 40px; background: linear-gradient(145deg,#1c1c1e,#3a3a3c); }
+  .o2 { top: 29.3%; left: 90.5%; margin-left: -19px; margin-top: -19px; width: 38px; height: 38px; background: rgba(255,255,255,0.95); }
+  .o3 { top: 79.3%; left: 90.5%; margin-left: -18px; margin-top: -18px; width: 36px; height: 36px; background: linear-gradient(145deg,#5856d6,#af52de); }
+  .o4 { top: 100%; left: 50%; margin-left: -19px; margin-top: -38px; width: 38px; height: 38px; background: linear-gradient(145deg,#34c759,#30d158); }
+  .o5 { top: 79.3%; left: 9.5%; margin-left: -17px; margin-top: -17px; width: 34px; height: 34px; background: linear-gradient(145deg,#0a84ff,#30b0c7); }
+  .o6 { top: 29.3%; left: 9.5%; margin-left: -18px; margin-top: -18px; width: 36px; height: 36px; background: linear-gradient(145deg,#ff9f0a,#ff6c02); }
 
-.toggle-btn {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  transition: color var(--transition), background var(--transition);
-  -webkit-tap-highlight-color: transparent;
-}
-.toggle-btn:hover { color: var(--text-secondary); background: rgba(0,0,0,0.05); }
-.toggle-btn svg { width: 18px; height: 18px; stroke-width: 2; }
+  /* Positions around ring-2 (radius 130px), on the reverse orbit */
+  .o7  { top: 3%;  left: 25%; width: 32px; height: 32px; background: linear-gradient(145deg,#ff453a,#ff9f9c); }
+  .o8  { top: 3%;  left: 68%; width: 32px; height: 32px; background: linear-gradient(145deg,#00c7be,#64d2ff); }
+  .o9  { top: 92%; left: 68%; width: 32px; height: 32px; background: linear-gradient(145deg,#ffd60a,#ff9f0a); }
+  .o10 { top: 92%; left: 25%; width: 32px; height: 32px; background: linear-gradient(145deg,#bf5af2,#5856d6); }
 
-/* ── Strength bar ── */
-.strength-row {
-  margin-top: 8px;
-  height: 0;
-  overflow: hidden;
-  transition: height 0.2s ease;
-}
-.strength-row.visible { height: 30px; }
-.strength-bar-track {
-  height: 3px;
-  background: rgba(0,0,0,0.07);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 5px;
-}
-.strength-bar-fill {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.35s ease, background 0.35s ease;
-  width: 0;
-}
-.strength-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  display: flex;
-  justify-content: space-between;
-}
+  .bubble-icon { fill: #fff; }
+  .o2 .bubble-icon { fill: none; }
 
-/* ── Caps lock pill ── */
-.caps-pill {
-  display: none;
-  align-items: center;
-  gap: 5px;
-  background: var(--warning-light);
-  border: 1px solid rgba(245,158,11,0.22);
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #92400e;
-  margin-top: 8px;
-  transition: all var(--transition);
-}
-.caps-pill.show { display: flex; }
-.caps-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+  /* Center hero orb — logo removed, replaced with animated glass core */
+  .core {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 96px; height: 96px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 5;
+    background: linear-gradient(150deg, #0a84ff, #64d2ff 55%, #bf5af2 100%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset,
+                0 10px 40px rgba(10,132,255,0.45),
+                0 0 60px rgba(100,210,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: core-breathe 4s ease-in-out infinite;
+  }
+  .core::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%);
+  }
+  .core::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1px solid rgba(100,210,255,0.35);
+    animation: ripple 3s ease-out infinite;
+  }
+  @keyframes core-breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%       { transform: translate(-50%, -50%) scale(1.05); }
+  }
+  @keyframes ripple {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+  .core svg {
+    width: 38px; height: 38px;
+    fill: #fff;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+  }
+  .core img {
+    width: 62px; height: 62px;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+  }
 
-/* ── Options row ── */
-.options-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 16px 0 22px;
-  gap: 12px;
-}
-.remember-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-.remember-check {
-  width: 17px; height: 17px;
-  border: 1.5px solid var(--border);
-  border-radius: 4px;
-  background: var(--surface-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition);
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.remember-check.checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.remember-check svg {
-  width: 10px; height: 10px;
-  stroke: #fff;
-  stroke-width: 2.5;
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-.remember-check.checked svg { opacity: 1; }
-.remember-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-.attempts-left {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-align: right;
-}
-.attempts-left.warn { color: var(--error); font-weight: 500; }
+  /* ══════════ BRAND ══════════ */
+  .brand { text-align: center; margin-bottom: 26px; position: relative; z-index: 1; }
+  .brand h1 {
+    font-size: 38px; font-weight: 800; letter-spacing: -1.2px;
+    background: linear-gradient(120deg, #ffffff 20%, #8ecbff 60%, #bf9bff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand p  { font-size: 13.5px; color: var(--label2); margin-top: 5px; letter-spacing: 0.2px; }
 
-/* ── Sign In button ── */
-.btn-signin {
-  width: 100%;
-  height: 52px;
-  background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  letter-spacing: -0.2px;
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 4px 18px var(--accent-glow);
-}
-.btn-signin::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0);
-  transition: background 0.15s;
-}
-.btn-signin:hover { transform: translateY(-1px); box-shadow: 0 8px 28px var(--accent-glow); }
-.btn-signin:active { transform: translateY(0) scale(0.98); }
-.btn-signin:disabled {
-  background: #cbd5e1;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-.btn-text { position: relative; z-index: 1; }
-.btn-spinner {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-.btn-spinner.show { display: flex; }
-.spinner-ring {
-  width: 22px; height: 22px;
-  border: 2.5px solid rgba(255,255,255,0.35);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to{ transform:rotate(360deg) } }
+  /* ══════════ CARD ══════════ */
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border-radius: 24px;
+    padding: 34px 30px;
+    box-shadow: 0 8px 50px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.06) inset;
+    border: 1px solid var(--card-border);
+    position: relative;
+    z-index: 1;
+    animation: card-in 0.7s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
-/* Ripple */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  transform: scale(0);
-  animation: rippleAnim 0.55s linear;
-  pointer-events: none;
-  z-index: 1;
-}
-@keyframes rippleAnim { to{ transform:scale(4); opacity:0; } }
+  .card h2 {
+    font-size: 21px; font-weight: 650;
+    color: var(--label);
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .card p.sub {
+    font-size: 13px; color: var(--label2);
+    text-align: center;
+    margin-bottom: 24px;
+  }
 
-/* ── Keyboard hint ── */
-.kb-hint {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 13px;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-kbd {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-bottom-width: 2px;
-  border-radius: 5px;
-  padding: 2px 7px;
-  font-size: 11px;
-  font-family: 'Inter', sans-serif;
-  color: var(--text-secondary);
-  letter-spacing: 0;
-  line-height: 1.6;
-}
+  .field-wrap { position: relative; margin-bottom: 16px; }
+  .field-label {
+    display: block; font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--label2); margin-bottom: 7px;
+  }
 
-/* ── Security notice ── */
-.security-strip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 20px;
-  font-size: 12px;
-  color: var(--text-muted);
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-}
-.security-strip svg {
-  width: 13px; height: 13px;
-  flex-shrink: 0;
-  color: var(--success);
-}
-.security-dot { color: var(--border); }
+  input[type=password] {
+    width: 100%; height: 48px;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid var(--sep);
+    border-radius: 13px;
+    font-size: 16px; letter-spacing: 3px;
+    padding: 0 15px;
+    color: var(--label);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  input[type=password]::placeholder { color: rgba(255,255,255,0.25); letter-spacing: 2px; }
+  input[type=password]:focus {
+    border-color: var(--blue);
+    background: rgba(10,132,255,0.08);
+    box-shadow: 0 0 0 4px rgba(10,132,255,0.15);
+  }
+  input[type=password].shake {
+    animation: shake 0.4s ease;
+    border-color: var(--red);
+  }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
 
-/* ── Footer ── */
-.footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-muted);
-}
+  .error-msg {
+    font-size: 12px; color: var(--red);
+    text-align: center;
+    margin-bottom: 10px;
+    min-height: 18px;
+    transition: opacity 0.3s;
+  }
 
-/* ── Success Overlay ── */
-.success-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  opacity: 0;
-  background: transparent;
-  transition: opacity 0.25s;
-}
-.success-overlay.show {
-  opacity: 1;
-  pointer-events: all;
-  animation: successBg 0.9s ease forwards;
-}
-@keyframes successBg {
-  0%  { background: rgba(255,255,255,0); }
-  40% { background: rgba(255,255,255,0.6); }
-  100%{ background: rgba(255,255,255,1); }
-}
-.success-icon-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  opacity: 0;
-  animation: successPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
-}
-@keyframes successPop {
-  from{ opacity:0; transform:scale(0.5); }
-  to  { opacity:1; transform:scale(1); }
-}
-.success-circle {
-  width: 76px; height: 76px;
-  background: linear-gradient(135deg, var(--success), #059669);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
-  animation: ringPulse 0.9s ease 0.65s 2;
-}
-@keyframes ringPulse {
-  0%  { box-shadow:0 0 0 0 rgba(16,185,129,0.4); }
-  70% { box-shadow:0 0 0 22px rgba(16,185,129,0); }
-  100%{ box-shadow:0 0 0 0 rgba(16,185,129,0); }
-}
-.success-circle svg {
-  width: 36px; height: 36px;
-  stroke: #fff;
-  stroke-width: 2.8;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.success-text { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+  .btn-signin {
+    width: 100%; height: 50px;
+    background: linear-gradient(135deg, var(--blue), var(--blue2));
+    color: #06131f;
+    border: none;
+    border-radius: 15px;
+    font-family: inherit;
+    font-size: 16.5px; font-weight: 700;
+    cursor: pointer;
+    letter-spacing: -0.1px;
+    transition: filter 0.15s, transform 0.1s, box-shadow 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 8px 24px rgba(10,132,255,0.35);
+  }
+  .btn-signin:hover  { filter: brightness(1.08); box-shadow: 0 10px 28px rgba(10,132,255,0.45); }
+  .btn-signin:active { transform: scale(0.98); }
+  .btn-signin:disabled { background: #48484a; color: #8e8e93; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* ── Responsive ── */
-@media (max-width: 440px) {
-  .card { padding: 28px 22px 26px; }
-  .brand-name { font-size: 22px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
+  /* lockout banner */
+  .lockout-banner {
+    display: none;
+    background: rgba(255,69,58,0.12);
+    border: 1px solid rgba(255,69,58,0.3);
+    border-radius: 13px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #ff8a80;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--label2);
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.3px;
+  }
 </style>
 </head>
 <body>
 
-<!-- Mesh background -->
-<div class="mesh"><div class="mesh-mid"></div></div>
+<!-- Orbit Icon System -->
+<div class="orbit-wrap">
+  <div class="orbit-ring ring-1"></div>
+  <div class="orbit-ring ring-2"></div>
 
-<!-- Success Overlay -->
-<div class="success-overlay" id="successOverlay">
-  <div class="success-icon-wrap">
-    <div class="success-circle">
-      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <!-- Center hero orb — your logo goes here -->
+  <div class="core">
+    <img id="appLogoImg" src="https://i.ibb.co.com/0RbMcVsn/Chat-GPT-Image-Jul-6-2026-02-43-38-PM.png" alt="GenHub logo">
+  </div>
+
+  <!-- Inner orbit -->
+  <div class="orbit">
+    <div class="orbit-icon o1" title="Apple">
+      <svg class="bubble-icon" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
     </div>
-    <div class="success-text">Signed in successfully</div>
+    <div class="orbit-icon o2" title="Google">
+      <svg class="bubble-icon" viewBox="0 0 24 24" width="22" height="22">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+    </div>
+    <div class="orbit-icon o3" title="Card">
+      <svg class="bubble-icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="rgba(255,255,255,0.9)"/><rect x="2" y="9" width="20" height="3" fill="rgba(255,255,255,0.5)"/><rect x="4" y="15" width="5" height="2" rx="1" fill="rgba(255,255,255,0.7)"/></svg>
+    </div>
+    <div class="orbit-icon o4" title="Address">
+      <svg class="bubble-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    </div>
+    <div class="orbit-icon o5" title="Phone">
+      <svg class="bubble-icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+    </div>
+    <div class="orbit-icon o6" title="World">
+      <svg class="bubble-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </div>
+  </div>
+
+  <!-- Outer orbit (reverse direction) -->
+  <div class="orbit reverse">
+    <div class="orbit-icon o7" title="Postal">
+      <svg class="bubble-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    </div>
+    <div class="orbit-icon o8" title="Shield">
+      <svg class="bubble-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3zm-1.2 13.4L7 11.6l1.4-1.4 2.4 2.4 5-5 1.4 1.4-6.4 6.4z"/></svg>
+    </div>
+    <div class="orbit-icon o9" title="Lock">
+      <svg class="bubble-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a4 4 0 0 0-4 4v3H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V5a4 4 0 0 0-4-4zm-2 4a2 2 0 1 1 4 0v3h-4zm2 8.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>
+    </div>
+    <div class="orbit-icon o10" title="Home">
+      <svg class="bubble-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
   </div>
 </div>
 
-<!-- Main -->
-<div class="page-wrap" id="pageWrap">
+<!-- Brand -->
+<div class="brand">
+  <h1>GenHub</h1>
+  <p>Address & Card Generator</p>
+</div>
 
-  <!-- Brand -->
-  <div class="brand-header">
-    <div class="brand-wordmark">
-      <div class="brand-icon">
-        <!-- Abstract 'G' mark — geometric, minimal -->
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3 L20 7.5 V16.5 L12 21 L4 16.5 V7.5 Z" stroke-width="1.8" stroke="rgba(255,255,255,0.4)" fill="none"/>
-          <path d="M12 3 L12 21" stroke-width="1.8" stroke="rgba(255,255,255,0.25)" fill="none"/>
-          <circle cx="12" cy="12" r="3" fill="white" stroke="none"/>
-        </svg>
-      </div>
-      <span class="brand-name">GenHub</span>
-    </div>
-    <div class="brand-tagline">Address &amp; Card Generator</div>
+<!-- Login Card -->
+<div class="card">
+  <h2>Sign In</h2>
+  <p class="sub">Enter your password to continue</p>
+
+  <div class="lockout-banner" id="lockoutBanner"></div>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="field-wrap">
+    <label class="field-label" for="pwInput">Password</label>
+    <input type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password">
   </div>
 
-  <!-- Status badges -->
-  <div class="status-badges">
-    <div class="welcome-badge" id="welcomeBadge">
-      <div class="badge-dot"></div>
-      <span>Welcome back!</span>
-    </div>
-    <div class="last-login" id="lastLogin"></div>
-  </div>
+  <button class="btn-signin" id="signinBtn" onclick="doLogin()">Sign In</button>
+</div>
 
-  <!-- Login card -->
-  <div class="card" id="loginCard">
-    <div class="card-title">Sign In</div>
-    <div class="card-sub">Enter your password to access GenHub</div>
-
-    <!-- Lockout banner -->
-    <div class="alert alert-lockout" id="lockoutAlert">
-      <svg style="width:20px;height:20px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-      <span id="lockoutMsg">Too many failed attempts.</span>
-      <div class="lockout-timer" id="lockoutTimer"></div>
-    </div>
-
-    <!-- Error alert -->
-    <div class="alert alert-error" id="errorAlert">
-      <div class="alert-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </div>
-      <span id="errorMsg"></span>
-    </div>
-
-    <!-- Caps Lock warning -->
-    <div class="caps-pill" id="capsPill">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-      Caps Lock is ON
-    </div>
-
-    <!-- Password field -->
-    <div class="field-group">
-      <div class="field-label">
-        <span class="field-label-text">Password</span>
-        <span class="field-hint">Ctrl+H to toggle</span>
-      </div>
-      <div class="input-wrap">
-        <input
-          type="password"
-          id="pwInput"
-          class="pw-input"
-          placeholder="••••••••"
-          autocomplete="current-password"
-          spellcheck="false"
-          autofocus
-        >
-        <button class="toggle-btn" id="togglePw" tabindex="-1" aria-label="Toggle password visibility" type="button">
-          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Options row -->
-    <div class="options-row">
-      <div class="remember-wrap" id="rememberWrap" onclick="toggleRemember()">
-        <div class="remember-check" id="rememberCheck">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <span class="remember-label">Remember me</span>
-      </div>
-      <div class="attempts-left" id="attemptsLeft"></div>
-    </div>
-
-    <!-- Submit button -->
-    <button class="btn-signin" id="signinBtn" onclick="doLogin(event)">
-      <span class="btn-text">Sign In</span>
-      <div class="btn-spinner" id="btnSpinner"><div class="spinner-ring"></div></div>
-    </button>
-
-    <!-- Keyboard hint -->
-    <div class="kb-hint">
-      <span>Press</span>
-      <kbd>Enter ↵</kbd>
-      <span>to sign in</span>
-    </div>
-
-    <!-- Security strip -->
-    <div class="security-strip">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>256-bit encrypted</span>
-      <span class="security-dot">·</span>
-      <span>Session secured</span>
-      <span class="security-dot">·</span>
-      <span>Auto-lock on idle</span>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">GenHub © 2025 &nbsp;·&nbsp; All rights reserved</div>
-
-</div><!-- end page-wrap -->
+<div class="footer-note">GenHub © 2025 · Secure Access</div>
 
 <script>
-// ─── Config ────────────────────────────────────────────────────────────────
-const CONFIG = {
-  PASSWORD:     "042567mm",
-  MAX_ATTEMPTS: 5,
-  LOCKOUT_MS:   60 * 60 * 1000,   // 1 hour
-  SESSION_DAYS: 1,
-  IDLE_TIMEOUT: 15 * 60 * 1000,   // 15 min idle lock
-};
+// ── Config ──────────────────────────────────────────
+const CORRECT_PW   = "042567mm";
+const LOCKOUT_MS   = 60 * 60 * 1000;   // 1 hour
+const MAX_ATTEMPTS = 5;                 // wrong tries before lockout
+const SESSION_KEY  = "gh_session";
+const LOCK_KEY     = "gh_lockout";
+const ATT_KEY      = "gh_attempts";
+// ────────────────────────────────────────────────────
 
-const KEYS = {
-  session:   "gh_session",
-  lockout:   "gh_lockout",
-  attempts:  "gh_attempts",
-  lastLogin: "gh_last_login",
-  remember:  "gh_remember",
-};
-
-// ─── State ─────────────────────────────────────────────────────────────────
-let rememberMe    = localStorage.getItem(KEYS.remember) === "1";
-let pwVisible     = false;
-let loginPending  = false;
-let idleTimer;
-
-// ─── Init ──────────────────────────────────────────────────────────────────
+// ── Check existing session ───────────────────────────
 (function init() {
-  // Check lockout first
+  // Check lockout
   if (isLocked()) { showLockout(); return; }
 
-  // Auto-session check
-  if (getCookie(KEYS.session) === "ok") { goApp(); return; }
-
-  // Welcome back
-  const lastLogin = localStorage.getItem(KEYS.lastLogin);
-  if (lastLogin) {
-    document.getElementById("welcomeBadge").classList.add("show");
-    const d = new Date(parseInt(lastLogin));
-    document.getElementById("lastLogin").textContent =
-      "Last signed in: " + d.toLocaleString("en-US", { month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
-    document.getElementById("lastLogin").classList.add("show");
-  }
-
-  // Remember me init
-  if (rememberMe) document.getElementById("rememberCheck").classList.add("checked");
-
-  // Attempts indicator
-  updateAttemptsUI();
-
-  // Focus password field
-  document.getElementById("pwInput").focus();
+  // Check valid session cookie
+  const sess = getCookie(SESSION_KEY);
+  if (sess === "ok") { goApp(); return; }
 })();
 
-// ─── Remember Me ───────────────────────────────────────────────────────────
-function toggleRemember() {
-  rememberMe = !rememberMe;
-  localStorage.setItem(KEYS.remember, rememberMe ? "1" : "0");
-  document.getElementById("rememberCheck").classList.toggle("checked", rememberMe);
-}
-
-// ─── Attempts UI ───────────────────────────────────────────────────────────
-function updateAttemptsUI() {
-  const attempts = parseInt(localStorage.getItem(KEYS.attempts) || "0");
-  if (attempts === 0) { document.getElementById("attemptsLeft").textContent = ""; return; }
-  const left = CONFIG.MAX_ATTEMPTS - attempts;
-  const el = document.getElementById("attemptsLeft");
-  el.textContent = `${left} attempt${left !== 1 ? "s" : ""} left`;
-  el.className = "attempts-left" + (left <= 2 ? " warn" : "");
-}
-
-// ─── Caps Lock ─────────────────────────────────────────────────────────────
-const pwInput = document.getElementById("pwInput");
-
-function detectCaps(e) {
-  const on = e.getModifierState && e.getModifierState("CapsLock");
-  document.getElementById("capsPill").classList.toggle("show", on);
-}
-pwInput.addEventListener("keydown",  detectCaps);
-pwInput.addEventListener("keyup",    detectCaps);
-
-// ─── Show/Hide password ────────────────────────────────────────────────────
-const eyeOpenPath  = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
-const eyeClosePath = `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
-
-document.getElementById("togglePw").addEventListener("click", () => {
-  pwVisible = !pwVisible;
-  pwInput.type = pwVisible ? "text" : "password";
-  pwInput.classList.toggle("text-mode", pwVisible);
-  document.getElementById("eyeIcon").innerHTML = pwVisible ? eyeClosePath : eyeOpenPath;
-  pwInput.focus();
-});
-
-// ─── Login ─────────────────────────────────────────────────────────────────
-function doLogin(e) {
-  if (loginPending) return;
-  if (e) ripple(e);
+// ── Login function ───────────────────────────────────
+function doLogin() {
   if (isLocked()) { showLockout(); return; }
 
-  const pw = pwInput.value.trim();
-  if (!pw) { shake(); showError("Please enter your password."); return; }
+  const pw = document.getElementById("pwInput").value;
 
-  loginPending = true;
-  setBtnLoading(true);
+  if (pw === CORRECT_PW) {
+    // Correct — set session (expires in 24h)
+    setCookie(SESSION_KEY, "ok", 1);
+    localStorage.removeItem(ATT_KEY);
+    localStorage.removeItem(LOCK_KEY);
+    goApp();
+  } else {
+    // Wrong password
+    let attempts = parseInt(localStorage.getItem(ATT_KEY) || "0") + 1;
+    localStorage.setItem(ATT_KEY, attempts);
 
-  // Small delay — feels more secure, smoother UX
-  setTimeout(() => {
-    loginPending = false;
-    setBtnLoading(false);
+    const input = document.getElementById("pwInput");
+    input.classList.add("shake");
+    setTimeout(() => input.classList.remove("shake"), 400);
 
-    if (pw === CONFIG.PASSWORD) {
-      localStorage.setItem(KEYS.lastLogin, Date.now().toString());
-      localStorage.removeItem(KEYS.attempts);
-      localStorage.removeItem(KEYS.lockout);
-
-      const days = rememberMe ? 7 : CONFIG.SESSION_DAYS;
-      setCookie(KEYS.session, "ok", days);
-
-      clearError();
-      showSuccess();
-
+    if (attempts >= MAX_ATTEMPTS) {
+      const lockUntil = Date.now() + LOCKOUT_MS;
+      localStorage.setItem(LOCK_KEY, lockUntil);
+      localStorage.removeItem(ATT_KEY);
+      showLockout();
     } else {
-      let attempts = parseInt(localStorage.getItem(KEYS.attempts) || "0") + 1;
-      localStorage.setItem(KEYS.attempts, attempts);
-      shake();
-
-      if (attempts >= CONFIG.MAX_ATTEMPTS) {
-        localStorage.setItem(KEYS.lockout, Date.now() + CONFIG.LOCKOUT_MS);
-        localStorage.removeItem(KEYS.attempts);
-        showLockout();
-      } else {
-        const left = CONFIG.MAX_ATTEMPTS - attempts;
-        showError(`Wrong password — ${left} attempt${left !== 1 ? "s" : ""} remaining.`);
-        updateAttemptsUI();
-      }
+      const left = MAX_ATTEMPTS - attempts;
+      document.getElementById("errorMsg").textContent =
+        `Incorrect password. ${left} attempt${left !== 1 ? "s" : ""} remaining.`;
     }
-  }, 480);
+  }
 }
 
-// ─── Button states ─────────────────────────────────────────────────────────
-function setBtnLoading(on) {
-  const btn = document.getElementById("signinBtn");
-  const txt = btn.querySelector(".btn-text");
-  const spin = document.getElementById("btnSpinner");
-  btn.disabled = on;
-  txt.style.opacity = on ? "0" : "1";
-  spin.classList.toggle("show", on);
-}
-
-// ─── UI helpers ────────────────────────────────────────────────────────────
-function shake() {
-  pwInput.classList.add("error-state");
-  setTimeout(() => pwInput.classList.remove("error-state"), 450);
-}
-
-function showError(msg) {
-  const el = document.getElementById("errorMsg");
-  const alert = document.getElementById("errorAlert");
-  el.textContent = msg;
-  alert.classList.add("show");
-}
-
-function clearError() {
-  document.getElementById("errorAlert").classList.remove("show");
-}
-
-function showLockout() {
-  document.getElementById("lockoutAlert").classList.add("show");
-  document.getElementById("signinBtn").disabled = true;
-  pwInput.disabled = true;
-  clearError();
-
-  const lockUntil = parseInt(localStorage.getItem(KEYS.lockout));
-  (function tick() {
-    const remain = lockUntil - Date.now();
-    if (remain <= 0) { localStorage.removeItem(KEYS.lockout); location.reload(); return; }
-    const m = Math.floor(remain / 60000);
-    const s = Math.floor((remain % 60000) / 1000);
-    document.getElementById("lockoutTimer").textContent =
-      `Unlocks in ${m}m ${String(s).padStart(2,"0")}s`;
-    setTimeout(tick, 1000);
-  })();
-}
-
-function showSuccess() {
-  const overlay = document.getElementById("successOverlay");
-  overlay.classList.add("show");
-  setTimeout(goApp, 1100);
-}
-
-// ─── Ripple ────────────────────────────────────────────────────────────────
-function ripple(e) {
-  const btn = document.getElementById("signinBtn");
-  const r = document.createElement("span");
-  r.className = "ripple";
-  const rect = btn.getBoundingClientRect();
-  const sz = Math.max(rect.width, rect.height);
-  r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
-  btn.appendChild(r);
-  setTimeout(() => r.remove(), 600);
-}
-
-// ─── Idle auto-lock ────────────────────────────────────────────────────────
-function resetIdleTimer() {
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => {
-    deleteCookie(KEYS.session);
-    location.reload();
-  }, CONFIG.IDLE_TIMEOUT);
-}
-["mousemove","keydown","click","touchstart"].forEach(ev =>
-  document.addEventListener(ev, resetIdleTimer, { passive: true })
-);
-resetIdleTimer();
-
-// ─── Lockout check ─────────────────────────────────────────────────────────
+// ── Lockout ──────────────────────────────────────────
 function isLocked() {
-  const lockUntil = localStorage.getItem(KEYS.lockout);
+  const lockUntil = localStorage.getItem(LOCK_KEY);
   if (!lockUntil) return false;
   if (Date.now() < parseInt(lockUntil)) return true;
-  localStorage.removeItem(KEYS.lockout);
+  localStorage.removeItem(LOCK_KEY);
   return false;
 }
 
-// ─── Cookie helpers ────────────────────────────────────────────────────────
+function showLockout() {
+  const lockUntil = parseInt(localStorage.getItem(LOCK_KEY));
+  const remainMin = Math.ceil((lockUntil - Date.now()) / 60000);
+
+  document.getElementById("lockoutBanner").style.display = "block";
+  document.getElementById("signinBtn").disabled = true;
+  document.getElementById("pwInput").disabled = true;
+  document.getElementById("errorMsg").textContent = "";
+
+  function updateTimer() {
+    const remain = lockUntil - Date.now();
+    if (remain <= 0) {
+      localStorage.removeItem(LOCK_KEY);
+      location.reload();
+      return;
+    }
+    const m = Math.floor(remain / 60000);
+    const s = Math.floor((remain % 60000) / 1000);
+    document.getElementById("lockoutBanner").innerHTML =
+      `🔒 Too many failed attempts.<br>Please wait <strong>${m}m ${s}s</strong> before trying again.`;
+    setTimeout(updateTimer, 1000);
+  }
+  updateTimer();
+}
+
+// ── Cookie helpers ───────────────────────────────────
 function setCookie(name, val, days) {
   const exp = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${val}; expires=${exp}; path=/; SameSite=Strict; Secure`;
+  document.cookie = `${name}=${val}; expires=${exp}; path=/; SameSite=Strict`;
 }
 function getCookie(name) {
-  return document.cookie.split("; ").reduce((a, c) => {
-    const [k, v] = c.split("="); return k === name ? v : a;
+  return document.cookie.split("; ").reduce((acc, c) => {
+    const [k, v] = c.split("=");
+    return k === name ? v : acc;
   }, "");
 }
-function deleteCookie(name) {
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict`;
-}
 
-// ─── Navigate ──────────────────────────────────────────────────────────────
+// ── Navigate ─────────────────────────────────────────
 function goApp() { window.location.href = "/index.html"; }
 
-// ─── Keyboard shortcuts ────────────────────────────────────────────────────
+// Enter key
 document.addEventListener("keydown", e => {
-  if (e.key === "Enter") doLogin(null);
-  if ((e.ctrlKey || e.metaKey) && e.key === "h") {
-    e.preventDefault();
-    document.getElementById("togglePw").click();
-  }
+  if (e.key === "Enter") doLogin();
 });
 </script>
 </body>
